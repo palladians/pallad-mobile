@@ -18,8 +18,7 @@ module.exports = (api) => {
 						"@unitools/link": "@unitools/link-expo",
 						"@ledgerhq/devices/hid-framing":
 							"@ledgerhq/devices/lib/hid-framing",
-						"@ledgerhq/devices/ble":
-							"@ledgerhq/devices/lib/ble",
+						"@ledgerhq/devices/ble": "@ledgerhq/devices/lib/ble",
 					},
 				},
 			],
