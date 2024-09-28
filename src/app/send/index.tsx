@@ -23,6 +23,7 @@ import {
 	Platform,
 	TouchableWithoutFeedback,
 } from "react-native";
+import colors from "tailwindcss/colors";
 import { z } from "zod";
 
 const FEES = [
@@ -65,6 +66,7 @@ const SendRoute = () => {
 		name: "recipient",
 		control,
 	});
+	const { field: memoField } = useController({ name: "memo", control });
 	const feeWatcher = watch("fee");
 	const onSubmit = handleSubmit((data) => {
 		if (!data.amount) throw new Error("Amount is required");
@@ -79,123 +81,133 @@ const SendRoute = () => {
 		router.push("/send/summary");
 	});
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<SafeAreaView className="flex-1 p-4 z-10">
 			<KeyboardAvoidingView
 				behavior={Platform.OS === "ios" ? "padding" : "height"}
 				style={{ flex: 1 }}
 			>
-				<SafeAreaView className="flex-1 p-4 z-10">
-					<View className="flex flex-1 flex-col justify-between">
-						<View className="justify-center items-center p-4 mt-10">
-							<FormControl>
-								<Input
-									className="flex h-16 w-64 rounded-2xl"
-									isInvalid={!!formState.errors.amount}
-								>
-									<InputField
-										type="text"
-										keyboardType="numeric"
-										placeholder="0.00"
-										className="h-16 text-3xl w-40"
-										onBlur={amountField.onBlur}
-										onChangeText={amountField.onChange}
-										value={amountField.value}
-									/>
-									<InputSlot className="flex-1">
-										<Button variant="link" className="px-4">
-											<ButtonText className="text-3xl font-light">
-												MINA
-											</ButtonText>
-										</Button>
-									</InputSlot>
-								</Input>
-							</FormControl>
-						</View>
-						<VStack className="p-4 gap-8">
-							<FormControl>
-								<FormControlLabel>
-									<FormControlLabelText>To</FormControlLabelText>
-								</FormControlLabel>
-								<Input
-									size="lg"
-									className="rounded-2xl border-zinc-900 h-16"
-									isInvalid={!!formState.errors.recipient}
-								>
-									<InputField
-										type="text"
-										placeholder="Recipient address"
-										className="bg-zinc-900 h-16 py-4"
-										onBlur={receipientField.onBlur}
-										onChangeText={receipientField.onChange}
-										value={receipientField.value}
-									/>
-									<InputSlot className="bg-zinc-900">
-										<Button variant="link" className="py-8 px-4 bg-zinc-900">
-											<ButtonIcon
-												as={UserRoundSearchIcon}
-												width={24}
-												height={24}
-												color="#ffffff"
-											/>
-										</Button>
-									</InputSlot>
-								</Input>
-							</FormControl>
-							<FormControl>
-								<FormControlLabel>
-									<FormControlLabelText>Transaction fee</FormControlLabelText>
-								</FormControlLabel>
-								<View className="flex flex-row gap-4">
-									{FEES.map((fee) => {
-										const active = fee.value === feeWatcher;
-										return (
-											<Pressable
-												key={fee.value}
-												className={clsx(
-													"flex justify-center items-center flex-1 bg-zinc-900 rounded-2xl p-2 border gap-1",
-													active && "border-zinc-400",
-												)}
-												onPress={() => setValue("fee", fee.value)}
-											>
-												<Text>{fee.label}</Text>
-												<Text className="text-zinc-400">{fee.value} MINA</Text>
-											</Pressable>
-										);
-									})}
-								</View>
-							</FormControl>
-							{showMemo ? (
-								<FormControl>
-									<FormControlLabel>
-										<FormControlLabelText>Memo</FormControlLabelText>
-									</FormControlLabel>
-									<Input size="lg" className="rounded-2xl h-16 border-zinc-900">
-										<InputField
-											type="text"
-											className="bg-zinc-900"
-											{...register("memo")}
-										/>
-									</Input>
-								</FormControl>
-							) : (
-								<Button variant="link" onPress={() => setShowMemo(true)}>
-									<ButtonText>Add Memo</ButtonText>
-								</Button>
-							)}
-						</VStack>
-						<View className="p-4">
-							<Button
-								size="xl"
-								className="rounded-full bg-brand"
-								onPress={onSubmit}
+				<View className="flex flex-1 flex-col justify-between">
+					<View className="justify-center items-center p-4 mt-10">
+						<FormControl isInvalid={!!formState.errors.amount}>
+							<Input
+								className={clsx("flex h-16 w-64 rounded-2xl border-black", {
+									"border-red-500": !!formState.errors.amount,
+								})}
+								isInvalid={!!formState.errors.amount}
 							>
-								<ButtonText>Continue</ButtonText>
-							</Button>
-						</View>
+								<InputField
+									type="text"
+									keyboardType="numeric"
+									placeholder="0.00"
+									className="h-16 text-3xl w-40 text-white"
+									onBlur={amountField.onBlur}
+									onChangeText={amountField.onChange}
+									value={amountField.value}
+									textAlign="right"
+									placeholderTextColor={colors.zinc[400]}
+									returnKeyType="done"
+								/>
+								<InputSlot className="flex-1">
+									<Button variant="link" className="px-4">
+										<ButtonText className="text-3xl font-light">
+											MINA
+										</ButtonText>
+									</Button>
+								</InputSlot>
+							</Input>
+						</FormControl>
 					</View>
-				</SafeAreaView>
+					<VStack className="p-4 gap-8">
+						<FormControl isInvalid={!!formState.errors.recipient}>
+							<FormControlLabel>
+								<FormControlLabelText>To</FormControlLabelText>
+							</FormControlLabel>
+							<Input
+								size="lg"
+								className={clsx("rounded-2xl border-zinc-900 h-16", {
+									"border-red-500": !!formState.errors.recipient,
+								})}
+								isInvalid={!!formState.errors.recipient}
+							>
+								<InputField
+									type="text"
+									placeholder="Recipient address"
+									className="bg-zinc-900 h-16 py-4 text-white"
+									onBlur={receipientField.onBlur}
+									onChangeText={receipientField.onChange}
+									value={receipientField.value}
+									placeholderTextColor={colors.zinc[400]}
+									returnKeyType="done"
+								/>
+								<InputSlot className="bg-zinc-900">
+									<Button variant="link" className="py-8 px-4 bg-zinc-900">
+										<ButtonIcon
+											as={UserRoundSearchIcon}
+											width={24}
+											height={24}
+											color="#ffffff"
+										/>
+									</Button>
+								</InputSlot>
+							</Input>
+						</FormControl>
+						<FormControl>
+							<FormControlLabel>
+								<FormControlLabelText>Transaction fee</FormControlLabelText>
+							</FormControlLabel>
+							<View className="flex flex-row gap-4">
+								{FEES.map((fee) => {
+									const active = fee.value === feeWatcher;
+									return (
+										<Pressable
+											key={fee.value}
+											className={clsx(
+												"flex justify-center items-center flex-1 bg-zinc-900 rounded-2xl p-2 border gap-1",
+												active && "border-zinc-400",
+											)}
+											onPress={() => setValue("fee", fee.value)}
+										>
+											<Text>{fee.label}</Text>
+											<Text className="text-zinc-400">{fee.value} MINA</Text>
+										</Pressable>
+									);
+								})}
+							</View>
+						</FormControl>
+						{showMemo ? (
+							<FormControl>
+								<FormControlLabel>
+									<FormControlLabelText>Memo</FormControlLabelText>
+								</FormControlLabel>
+								<Input size="lg" className="rounded-2xl h-16 border-zinc-900">
+									<InputField
+										type="text"
+										className="bg-zinc-900 text-white"
+										onBlur={memoField.onBlur}
+										onChangeText={memoField.onChange}
+										value={memoField.value}
+										returnKeyType="done"
+									/>
+								</Input>
+							</FormControl>
+						) : (
+							<Button variant="link" onPress={() => setShowMemo(true)}>
+								<ButtonText>Add Memo</ButtonText>
+							</Button>
+						)}
+					</VStack>
+					<View className="p-4">
+						<Button
+							size="xl"
+							className="rounded-full bg-brand"
+							onPress={onSubmit}
+						>
+							<ButtonText>Continue</ButtonText>
+						</Button>
+					</View>
+				</View>
 			</KeyboardAvoidingView>
-		</TouchableWithoutFeedback>
+		</SafeAreaView>
 	);
 };
 

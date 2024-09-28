@@ -1,10 +1,13 @@
 import "@web3modal/polyfills";
 import { type Connectivity, type Vendor, useVault } from "@/store/vault";
 import type { Transaction } from "@/types";
-import TransportWebHID from "@ledgerhq/hw-transport-webhid";
+// To import on desktop, uncomment this one.
+// import TransportHID from "@ledgerhq/hw-transport-webhid";
+import TransportHID from "@ledgerhq/react-native-hid";
 import TransportBluetooth from "@ledgerhq/react-native-hw-transport-ble";
 import { MinaLedgerJS, Networks, TxType } from "mina-ledger-js";
 import { nanoid } from "nanoid";
+import { ofetch } from "ofetch";
 import { match } from "ts-pattern";
 
 type importWalletProps = {
@@ -22,18 +25,20 @@ export const useWallet = () => {
 	const currentKeyAgent = useVault((state) => state.getCurrentKeyAgent());
 
 	const _getNonce = async (publicKey: string) => {
-		const req = await fetch("https://devnet.klesia.palladians.xyz/api", {
-			method: "POST",
-			body: JSON.stringify({
-				method: "mina_getTransactionCount",
-				params: [publicKey],
-			}),
-			headers: {
-				"Content-Type": "application/json",
+		const { result } = await ofetch<{ result: string }>(
+			"https://devnet.klesia.palladians.xyz/api",
+			{
+				method: "POST",
+				body: JSON.stringify({
+					method: "mina_getTransactionCount",
+					params: [publicKey],
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
 			},
-		});
-		const json = await req.json();
-		return Number.parseInt(json.result);
+		);
+		return Number.parseInt(result);
 	};
 
 	const _getHwSdk = async ({
@@ -51,7 +56,7 @@ export const useWallet = () => {
 						return new MinaLedgerJS(transport as never);
 					})
 					.with("usb", async () => {
-						const transport = await TransportWebHID.create();
+						const transport = await TransportHID.create();
 						return new MinaLedgerJS(transport as never);
 					})
 					.exhaustive(),

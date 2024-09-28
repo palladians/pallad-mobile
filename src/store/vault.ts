@@ -1,6 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { mmkvStorage } from "../lib/storage";
 
 type KeyAgentType = "hw";
 
@@ -71,7 +71,7 @@ export const useVault = create<VaultStore>()(
 		}),
 		{
 			name: "pallad_vault",
-			storage: createJSONStorage(() => mmkvStorage),
+			storage: createJSONStorage(() => AsyncStorage),
 		},
 	),
 );

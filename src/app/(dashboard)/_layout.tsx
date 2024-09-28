@@ -31,29 +31,18 @@ const DashboardLayout = () => {
 					headerShown: false,
 				}}
 			/>
-			{/* <Tabs.Screen
-        name="send/index"
-        options={{
-          title: "Send",
-          href: null,
-          headerStyle: {
-            backgroundColor: "#000000",
-            borderBottomColor: "#000000",
-          },
-          headerLeft: () => (
-            <Link href="/home" asChild>
-              <Button variant="link" className="px-4">
-                <ButtonIcon as={ChevronLeftIcon} className="w-8 h-8" />
-              </Button>
-            </Link>
-          ),
-        }}
-      /> */}
 			<Tabs.Screen
 				name="inbox/index"
 				options={{
 					title: "Inbox",
 					tabBarIcon: ({ color }) => <InboxIcon color={color} size={24} />,
+				}}
+			/>
+			<Tabs.Screen
+				name="inbox/[publicKey]"
+				options={{
+					title: "Inbox",
+					href: null,
 				}}
 			/>
 			<Tabs.Screen
