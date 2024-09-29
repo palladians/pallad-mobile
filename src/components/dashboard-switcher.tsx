@@ -6,6 +6,7 @@ import {
 import { View } from "@/components/ui/view";
 import { truncateString } from "@/lib/utils";
 import { Link } from "expo-router";
+import { ChevronDownIcon } from "lucide-react-native";
 import { useState } from "react";
 import {
 	Actionsheet,
@@ -17,7 +18,6 @@ import {
 	ActionsheetItemText,
 } from "./ui/actionsheet";
 import { Button, ButtonIcon, ButtonText } from "./ui/button";
-import { ChevronDownIcon } from "./ui/icon";
 
 export const DashboardSwitcher = () => {
 	const [showActionsheet, setShowActionsheet] = useState(false);

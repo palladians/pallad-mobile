@@ -1,13 +1,13 @@
 import "@web3modal/polyfills";
 import { type Connectivity, type Vendor, useVault } from "@/store/vault";
 import type { Transaction } from "@/types";
+import { listen } from "@ledgerhq/logs";
 // To import on desktop, uncomment this one.
 // import TransportHID from "@ledgerhq/hw-transport-webhid";
 import TransportHID from "@ledgerhq/react-native-hid";
 import TransportBluetooth from "@ledgerhq/react-native-hw-transport-ble";
 import { MinaLedgerJS, Networks, TxType } from "mina-ledger-js";
 import { nanoid } from "nanoid";
-import { ofetch } from "ofetch";
 import { match } from "ts-pattern";
 
 type importWalletProps = {
@@ -25,20 +25,18 @@ export const useWallet = () => {
 	const currentKeyAgent = useVault((state) => state.getCurrentKeyAgent());
 
 	const _getNonce = async (publicKey: string) => {
-		const { result } = await ofetch<{ result: string }>(
-			"https://devnet.klesia.palladians.xyz/api",
-			{
-				method: "POST",
-				body: JSON.stringify({
-					method: "mina_getTransactionCount",
-					params: [publicKey],
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
+		const response = await fetch("https://devnet.klesia.palladians.xyz/api", {
+			method: "POST",
+			body: JSON.stringify({
+				method: "mina_getTransactionCount",
+				params: [publicKey],
+			}),
+			headers: {
+				"Content-Type": "application/json",
 			},
-		);
-		return Number.parseInt(result);
+		});
+		const json = await response.json();
+		return Number.parseInt(json.result);
 	};
 
 	const _getHwSdk = async ({
@@ -52,11 +50,11 @@ export const useWallet = () => {
 			.with("ledger", () =>
 				match(connectivity)
 					.with("ble", async () => {
-						const transport = await TransportBluetooth.create();
+						const transport = await TransportBluetooth.create(60000, 60000);
 						return new MinaLedgerJS(transport as never);
 					})
 					.with("usb", async () => {
-						const transport = await TransportHID.create();
+						const transport = await TransportHID.create(60000, 60000);
 						return new MinaLedgerJS(transport as never);
 					})
 					.exhaustive(),
@@ -82,6 +80,7 @@ export const useWallet = () => {
 			vendor,
 			connectivity,
 		});
+		listen((log) => console.log(log));
 		const wallet = await instance.getAddress(addressIndex);
 		if (!wallet.publicKey) throw new Error("No public key found");
 		const derivationPath = `m/44'/12586'/0'/0/${addressIndex}`;
@@ -118,6 +117,7 @@ export const useWallet = () => {
 			nonce,
 			txType: TxType.PAYMENT,
 		};
+		console.log(">>>BODY", txBody);
 		return wallet.signTransaction(txBody);
 	};
 

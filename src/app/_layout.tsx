@@ -1,13 +1,16 @@
 import "@web3modal/polyfills";
 import "react-native-get-random-values";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "../global.css";
+import { Providers } from "@/components/providers";
+import { SafeAreaView } from "@/components/ui/safe-area-view";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -24,8 +27,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const [loaded, error] = useFonts({
-		SpaceMono: require("../assets/SpaceMono-Regular.ttf"),
-		...FontAwesome.font,
+		"DM Sans": require("../assets/DMSans.ttf"),
 	});
 
 	// Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -48,12 +50,10 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
 	return (
-		<GluestackUIProvider mode="dark">
-			<ThemeProvider value={DarkTheme}>
-				<Stack screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="start" />
-				</Stack>
-			</ThemeProvider>
-		</GluestackUIProvider>
+		<Providers>
+			<SafeAreaView className="flex flex-1 flex-col font-dm-sans">
+				<Slot />
+			</SafeAreaView>
+		</Providers>
 	);
 }

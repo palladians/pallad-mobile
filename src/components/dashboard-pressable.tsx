@@ -1,6 +1,5 @@
 import { Link } from "expo-router";
 import type { ElementType } from "react";
-import { Platform } from "react-native";
 import { Pressable } from "./ui/pressable";
 import { Text } from "./ui/text";
 import { View } from "./ui/view";
@@ -12,7 +11,6 @@ type DashboardPressable = {
 };
 
 export const DashboardPressable = ({ Icon, label, to }: DashboardPressable) => {
-	const iconSize = Platform.select({ web: 44, ios: 10 });
 	return (
 		<View className="justify-center items-center gap-2">
 			<Link href={to as never} asChild>

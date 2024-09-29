@@ -5,7 +5,6 @@ import {
 	FormControlLabelText,
 } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
-import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
 import { useWallet } from "@/hooks/use-wallet";
@@ -52,7 +51,7 @@ const ImportRoute = () => {
 	};
 
 	return (
-		<SafeAreaView className="flex flex-1 flex-col justify-between p-4">
+		<View className="gap-4">
 			<View className="flex flex-col gap-8 w-full">
 				<Text className="text-2xl font-semibold">Import Wallet</Text>
 				<Text className="text-zinc-400">
@@ -105,7 +104,7 @@ const ImportRoute = () => {
 					<ButtonText>Import via USB</ButtonText>
 				</Button>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 };
 

@@ -1,9 +1,18 @@
 import type { ExternalTransactionData } from "@/types";
-import { ofetch } from "ofetch";
 
-export const constructTransactionsUrl = (publicKey: string) => {
+export type MinaNetwork = "mainnet" | "devnet";
+
+export type ConstructTransactionsUrlProps = {
+	publicKey: string;
+	network: MinaNetwork;
+};
+
+export const constructTransactionsUrl = ({
+	publicKey,
+	network,
+}: ConstructTransactionsUrlProps) => {
 	const url = new URL(
-		`https://minascan.io/mainnet/api/api/core/accounts/${publicKey}/activity`,
+		`https://minascan.io/${network}/api/api/core/accounts/${publicKey}/activity`,
 	);
 	url.searchParams.append("page", "0");
 	url.searchParams.append("limit", "200");
@@ -15,19 +24,18 @@ export const constructTransactionsUrl = (publicKey: string) => {
 	return url.toString();
 };
 
-type FetchHistoricalTransactionsProps = {
-	publicKey: string;
-};
-
 export type HistoricalTransactionsResponse = {
 	data: ExternalTransactionData[];
 };
 
-export const fetchHistoricalTransactions = async ({
-	publicKey,
-}: FetchHistoricalTransactionsProps) => {
-	const { data } = await ofetch<HistoricalTransactionsResponse>(
-		constructTransactionsUrl(publicKey),
-	);
-	return data;
+export type ConstructTransactionUrlProps = {
+	hash: string;
+	network: MinaNetwork;
+};
+
+export const constructTransactionUrl = ({
+	hash,
+	network,
+}: ConstructTransactionUrlProps) => {
+	return `https://minascan.io/${network}/api/api/core/transactions/${hash}`;
 };

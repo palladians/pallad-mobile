@@ -1,49 +1,80 @@
-import { SafeAreaView } from "@/components/ui/safe-area-view";
+import { ChatEntry } from "@/components/chat-entry";
+import { ChatMenu } from "@/components/chat-menu";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
 import { type Message, useInbox } from "@/hooks/use-inbox";
+import { dateFromNow } from "@/lib/utils";
 import { FlashList } from "@shopify/flash-list";
-import { clsx } from "clsx";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import {
+	Link,
+	useLocalSearchParams,
+	useNavigation,
+	useRouter,
+} from "expo-router";
 import { useLayoutEffect } from "react";
 
-const ChatMessage = ({ message }: { message: Message }) => {
+const DateMessages = ({
+	date,
+	messages,
+}: {
+	date: string;
+	messages: Message[];
+}) => {
 	return (
-		<View
-			className={clsx(
-				"flex flex-row bg-gray-900 mb-2 mx-4 p-4 rounded-2xl",
-				message.sender === "me"
-					? "bg-blue-500 self-end rounded-br-none"
-					: "bg-gray-900 self-start rounded-bl-none",
-			)}
-		>
-			<Text>{message.content}</Text>
+		<View className="flex flex-col">
+			<Text className="text-center text-xs text-gray-500">
+				{dateFromNow(date)}
+			</Text>
+			<FlashList
+				data={messages}
+				renderItem={({ item }) => <ChatEntry message={item} />}
+				className="mt-2"
+				estimatedItemSize={92}
+			/>
 		</View>
 	);
 };
 
 const ChatRoute = () => {
+	const router = useRouter();
 	const navigation = useNavigation();
-	const { publicKey } = useLocalSearchParams();
+	const { publicKey, menuVisible } = useLocalSearchParams();
 	const { inbox } = useInbox({ participantAddress: publicKey.toString() });
 	const chat = inbox[0];
+	const messagesByDate = chat?.messages ? Object.entries(chat.messages) : [];
+	const chatMenuVisible = menuVisible?.toString() === "true";
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
-			headerTitle: chat.participantName,
+			headerTitle: chat?.participantName,
 		});
-	}, [chat.participantName, navigation.setOptions]);
+	}, [chat?.participantName, navigation.setOptions]);
 
 	return (
-		<SafeAreaView className="flex flex-1 flex-col">
+		<View className="flex flex-1 flex-col">
 			<FlashList
-				data={chat.messages}
-				renderItem={({ item }) => <ChatMessage message={item} />}
-				className="pt-4 pb-2"
+				data={messagesByDate}
+				renderItem={({ item }) => (
+					<DateMessages date={item[0]} messages={item[1]} />
+				)}
+				contentContainerClassName="pt-4 pb-16" // Careful, inverted values top-bottom
 				inverted
-				estimatedItemSize={64}
+				estimatedItemSize={116}
 			/>
-		</SafeAreaView>
+			<View className="flex flex-row items-center justify-end p-4 border-t border-zinc-800">
+				<Link href={`/send?receiver=${chat?.participantAddress}`} asChild>
+					<Button className="rounded-full bg-brand">
+						<ButtonText>Transfer</ButtonText>
+					</Button>
+				</Link>
+			</View>
+			<ChatMenu
+				open={chatMenuVisible}
+				onClose={() => router.setParams({ menuVisible: "false" })}
+				address={chat?.participantAddress}
+			/>
+		</View>
 	);
 };
 

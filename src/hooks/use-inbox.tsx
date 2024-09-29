@@ -2,19 +2,24 @@ import {
 	type HistoricalTransactionsResponse,
 	constructTransactionsUrl,
 } from "@/lib/archive";
-import { truncateString } from "@/lib/utils";
+import { fetcher, truncateString } from "@/lib/utils";
+import { useVault } from "@/store/vault";
 import type { ExternalTransactionData } from "@/types";
 import dayjs from "dayjs";
-import { ofetch } from "ofetch";
 import * as Rambda from "rambda";
 import useSWR from "swr";
 import { useWallet } from "./use-wallet";
 
+export type MessageType = "payment" | "message";
+
 export type Message = {
+	hash: string;
 	sender: string;
 	content: string;
+	amount: number;
 	timestamp: number;
 	date: string;
+	type: MessageType;
 };
 
 type CreateInboxProps = {
@@ -56,6 +61,7 @@ const createInbox = ({ transactions }: CreateInboxProps) => {
 
 		const messages = Rambda.map(
 			(transaction: ExternalTransactionData) => ({
+				hash: transaction.transactionHash,
 				sender:
 					transaction.direction === "IN" ? transaction.senderAddress : "me",
 				content:
@@ -64,16 +70,25 @@ const createInbox = ({ transactions }: CreateInboxProps) => {
 						transaction.amount
 					} MINA`,
 				timestamp: transaction.age,
-				date: dayjs(transaction.age).format("MMM DD"),
+				date: dayjs(transaction.age).format("YYYY-MM-DD"),
+				amount: transaction.amount,
+				type: (transaction.memo.length > 0
+					? "message"
+					: "payment") as MessageType,
 			}),
 			group,
+		);
+
+		const messagesByDate = Rambda.groupBy(
+			(message: Message) => message.date,
+			Rambda.sort((a, b) => b.timestamp - a.timestamp, messages),
 		);
 
 		return {
 			participantAddress,
 			participantName,
 			participantImage,
-			messages: Rambda.sort((a, b) => b.timestamp - a.timestamp, messages),
+			messages: messagesByDate,
 		};
 	}, Rambda.values(groupedTransactions));
 };
@@ -85,11 +100,18 @@ type UseInboxProps = {
 export const useInbox = (
 	{ participantAddress }: UseInboxProps = { participantAddress: undefined },
 ) => {
+	const networkMode = useVault((state) => state.networkMode);
+	const network = networkMode === "mainnet" ? "mainnet" : "devnet";
 	const { getWallet } = useWallet();
 	const wallet = getWallet();
 	const { data, isLoading, error } = useSWR<HistoricalTransactionsResponse>(
-		wallet?.publicKey ? constructTransactionsUrl(wallet?.publicKey) : null,
-		ofetch,
+		wallet?.publicKey
+			? constructTransactionsUrl({
+					publicKey: wallet?.publicKey,
+					network,
+				})
+			: null,
+		fetcher,
 	);
 	const inbox = data?.data
 		? createInbox({

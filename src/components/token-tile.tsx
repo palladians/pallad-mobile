@@ -1,5 +1,4 @@
 import type { ElementType, ReactNode } from "react";
-import { Icon } from "./ui/icon";
 import { Text } from "./ui/text";
 import { View } from "./ui/view";
 

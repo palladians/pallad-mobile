@@ -1,13 +1,12 @@
 import StartIllustration from "@/assets/start.svg";
 import { Button, ButtonText } from "@/components/ui/button";
-import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
 import { Link } from "expo-router";
 
 const StartRoute = () => {
 	return (
-		<SafeAreaView className="flex flex-1 flex-col justify-between items-center">
+		<View className="flex flex-1 flex-col justify-between items-center">
 			<StartIllustration />
 			<View className="flex flex-col gap-2 items-center w-full p-4">
 				<Text className="text-2xl font-semibold text-center">
@@ -23,7 +22,7 @@ const StartRoute = () => {
 					</Button>
 				</Link>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 };
 

@@ -6,13 +6,12 @@ import MinaLogo from "@/assets/mina-logo.svg";
 import { DashboardPressable } from "@/components/dashboard-pressable";
 import { DashboardSwitcher } from "@/components/dashboard-switcher";
 import { TokenTile } from "@/components/token-tile";
-import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
 
 const HomeRoute = () => {
 	return (
-		<SafeAreaView className="flex flex-1 flex-col pt-12">
+		<View>
 			<View className="gap-8 p-4 border-b-2 border-zinc-700 pb-8">
 				<DashboardSwitcher />
 				<View className="gap-1">
@@ -45,7 +44,7 @@ const HomeRoute = () => {
 					ticker="MINA"
 				/>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 };
 

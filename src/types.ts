@@ -10,6 +10,15 @@ export type TransactionWithNonce = Transaction & {
 	nonce: number;
 };
 
+export type ScamData = {
+	scamId: null;
+	objectType: null;
+	onchainId: null;
+	defaultSecurityMessage: null;
+	securityMessage: null;
+	scamType: null;
+};
+
 export type ExternalTransactionData = {
 	senderAddress: string;
 	senderName: string | null;
@@ -34,20 +43,37 @@ export type ExternalTransactionData = {
 	nonce: number;
 	slot: number;
 	globalSlot: number;
-	sourceScam: {
-		scamId: null;
-		objectType: null;
-		onchainId: null;
-		defaultSecurityMessage: null;
-		securityMessage: null;
-		scamType: null;
-	};
-	receiverScam: {
-		scamId: null;
-		objectType: null;
-		onchainId: null;
-		defaultSecurityMessage: null;
-		securityMessage: null;
-		scamType: null;
-	};
+	sourceScam: ScamData;
+	receiverScam: ScamData;
+};
+
+export type ExternalDetailedTransactionData = {
+	hash: string;
+	type: "payment" | "delegation";
+	amount: number;
+	receivedAmount: number;
+	receivedDelegationAmount: number;
+	amountUsd: number;
+	receivedAmountUsd: number;
+	fee: number;
+	feeUsd: number;
+	sourceAddress: string;
+	sourceName: string;
+	sourceImg: string;
+	isZkAppAccountSource: boolean;
+	receiverAddress: string;
+	receiverName: null | string;
+	receiverImg: null | string;
+	isZkAppAccountReceiver: boolean;
+	memo: string;
+	nonce: number;
+	delegationAmount: null | number;
+	delegationAmountUsd: null | number;
+	alert: null | string;
+	sequenceNumber: number;
+	failureReason: null | string;
+	timestamp: number;
+	epoch: number;
+	sourceScam: ScamData;
+	receiverScam: ScamData;
 };

@@ -1,11 +1,5 @@
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
-import { Link, Tabs } from "expo-router";
-import {
-	ChevronLeftIcon,
-	CircleUserIcon,
-	HomeIcon,
-	InboxIcon,
-} from "lucide-react-native";
+import { Tabs } from "expo-router";
+import { CircleUserIcon, HomeIcon, InboxIcon } from "lucide-react-native";
 
 const DashboardLayout = () => {
 	return (
@@ -18,8 +12,6 @@ const DashboardLayout = () => {
 				tabBarStyle: {
 					backgroundColor: "#000000",
 					borderTopColor: "#374151",
-					height: 88,
-					paddingBottom: 32,
 				},
 			}}
 		>
@@ -32,17 +24,19 @@ const DashboardLayout = () => {
 				}}
 			/>
 			<Tabs.Screen
-				name="inbox/index"
+				name="inbox"
 				options={{
 					title: "Inbox",
 					tabBarIcon: ({ color }) => <InboxIcon color={color} size={24} />,
+					headerShown: false,
 				}}
 			/>
 			<Tabs.Screen
-				name="inbox/[publicKey]"
+				name="send"
 				options={{
-					title: "Inbox",
+					title: "Send",
 					href: null,
+					headerShown: false,
 				}}
 			/>
 			<Tabs.Screen
