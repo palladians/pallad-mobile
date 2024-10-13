@@ -1,7 +1,6 @@
-import { Button, ButtonIcon } from "@/components/ui/button";
-import { Link } from "expo-router";
-import { Stack, useRouter } from "expo-router";
-import { ArrowLeftIcon, QrCodeIcon } from "lucide-react-native";
+import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import { Link, Stack, useRouter } from "expo-router";
+import { ArrowLeftIcon } from "lucide-react-native";
 import colors from "tailwindcss/colors";
 
 const Layout = () => {
@@ -20,7 +19,7 @@ const Layout = () => {
 			<Stack.Screen
 				name="index"
 				options={{
-					title: "Send",
+					title: "Stake",
 					headerLeft: () => (
 						<Button
 							variant="link"
@@ -36,29 +35,13 @@ const Layout = () => {
 							/>
 						</Button>
 					),
-					// TODO: Enable when QR code scanning is not crashing on iOS.
 					headerRight: () => (
-						<Link href="/send/scan" asChild>
+						<Link href="/send?txType=4" asChild>
 							<Button variant="link" size="lg">
-								<ButtonIcon as={QrCodeIcon} />
+								<ButtonText>Delegate</ButtonText>
 							</Button>
 						</Link>
 					),
-				}}
-			/>
-			<Stack.Screen
-				name="summary"
-				options={{
-					title: "Summary",
-				}}
-			/>
-			<Stack.Screen
-				name="scan"
-				options={{
-					title: "Scan QR Code",
-					presentation: "modal",
-					headerStyle: { backgroundColor: colors.neutral[900] },
-					contentStyle: { backgroundColor: colors.neutral[900] },
 				}}
 			/>
 		</Stack>

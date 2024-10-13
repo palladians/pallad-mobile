@@ -1,3 +1,6 @@
+import type { z } from "zod";
+import type { SendPaymentSchema } from "./lib/validation";
+
 export type Transaction = {
 	txType: number;
 	amount: number;
@@ -77,3 +80,7 @@ export type ExternalDetailedTransactionData = {
 	sourceScam: ScamData;
 	receiverScam: ScamData;
 };
+
+export type SigningState = "idle" | "signing" | "signed" | "error";
+
+export type NodePayment = z.infer<typeof SendPaymentSchema>;

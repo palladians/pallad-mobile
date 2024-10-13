@@ -19,14 +19,19 @@ export type Message = {
 	amount: number;
 	timestamp: number;
 	date: string;
+	txType: "payment" | "delegation";
 	type: MessageType;
 };
 
 type CreateInboxProps = {
 	transactions: ExternalTransactionData[];
+	hideTinyTransactions: boolean;
 };
 
-const createInbox = ({ transactions }: CreateInboxProps) => {
+const createInbox = ({
+	transactions,
+	hideTinyTransactions,
+}: CreateInboxProps) => {
 	const groupedTransactions = Rambda.groupBy(
 		(transaction: ExternalTransactionData) => {
 			return transaction.direction === "IN"
@@ -59,29 +64,38 @@ const createInbox = ({ transactions }: CreateInboxProps) => {
 		const participantImage =
 			group[0].direction === "IN" ? group[0].senderImg : group[0].receiverImg;
 
-		const messages = Rambda.map(
-			(transaction: ExternalTransactionData) => ({
+		const messages = Rambda.map((transaction: ExternalTransactionData) => {
+			console.log(transaction.amount);
+			if (
+				transaction.type === "payment" &&
+				hideTinyTransactions &&
+				transaction.amount < 1
+			) {
+				return undefined;
+			}
+      const actionLabel = transaction.direction === "IN" ? "Received" : transaction.type === "payment" ? "Sent" : "Delegated";
+			return {
 				hash: transaction.transactionHash,
 				sender:
 					transaction.direction === "IN" ? transaction.senderAddress : "me",
 				content:
 					transaction.memo ||
-					`${transaction.direction === "IN" ? "Received" : "Sent"} ${
+					`${actionLabel} ${
 						transaction.amount
 					} MINA`,
 				timestamp: transaction.age,
 				date: dayjs(transaction.age).format("YYYY-MM-DD"),
 				amount: transaction.amount,
+				txType: transaction.type,
 				type: (transaction.memo.length > 0
 					? "message"
 					: "payment") as MessageType,
-			}),
-			group,
-		);
+			};
+		}, group).filter(Boolean) as Message[];
 
 		const messagesByDate = Rambda.groupBy(
 			(message: Message) => message.date,
-			Rambda.sort((a, b) => b.timestamp - a.timestamp, messages),
+			Rambda.sort((a, b) => a.timestamp - b.timestamp, messages),
 		);
 
 		return {
@@ -101,21 +115,27 @@ export const useInbox = (
 	{ participantAddress }: UseInboxProps = { participantAddress: undefined },
 ) => {
 	const networkMode = useVault((state) => state.networkMode);
+	const hideTinyTransactions = useVault((state) => state.hideTinyTransactions);
 	const network = networkMode === "mainnet" ? "mainnet" : "devnet";
 	const { getWallet } = useWallet();
 	const wallet = getWallet();
-	const { data, isLoading, error } = useSWR<HistoricalTransactionsResponse>(
-		wallet?.publicKey
-			? constructTransactionsUrl({
-					publicKey: wallet?.publicKey,
-					network,
-				})
-			: null,
-		fetcher,
-	);
+	const { data, isLoading, error, mutate } =
+		useSWR<HistoricalTransactionsResponse>(
+			[
+				wallet?.publicKey
+					? constructTransactionsUrl({
+							publicKey: wallet?.publicKey,
+							network,
+						})
+					: null,
+				network,
+			],
+			([url]) => fetcher(url),
+		);
 	const inbox = data?.data
 		? createInbox({
 				transactions: data?.data,
+				hideTinyTransactions,
 			})
 		: [];
 	return {
@@ -124,5 +144,6 @@ export const useInbox = (
 			: inbox,
 		isLoading,
 		error,
+		mutate,
 	};
 };

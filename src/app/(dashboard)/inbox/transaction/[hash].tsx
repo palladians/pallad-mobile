@@ -6,8 +6,9 @@ import {
 	FormControlLabelText,
 } from "@/components/ui/form-control";
 import { HStack } from "@/components/ui/hstack";
+import { Input, InputField } from "@/components/ui/input";
+import { ScrollView } from "@/components/ui/scroll-view";
 import { Text } from "@/components/ui/text";
-import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import { View } from "@/components/ui/view";
 import { VStack } from "@/components/ui/vstack";
 import { useExplorer } from "@/hooks/use-explorer";
@@ -61,15 +62,16 @@ const TransactionRoute = () => {
 		}
 	};
 	return (
-		<VStack className="flex flex-1 flex-col p-4 justify-between pb-8">
-			<VStack className="flex flex-col gap-4">
+		<ScrollView contentContainerClassName="flex-grow p-4 gap-8">
+			<VStack className="flex flex-1 flex-col gap-8">
 				<Card
 					variant="filled"
-					className="rounded-2xl flex flex-row justify-between items-center"
+					className="rounded-2xl flex flex-row justify-between items-center border border-neutral-700 bg-neutral-900"
 				>
 					<VStack>
-						<Text className="text-sm text-gray-400">From</Text>
-						<Text className="text-white">
+						<Text className="text-sm text-neutral-400">From</Text>
+						<Text className="text-neutral-200
+">
 							{truncateString({
 								value: transaction?.sourceAddress ?? "",
 								firstCharCount: 5,
@@ -77,12 +79,13 @@ const TransactionRoute = () => {
 							})}
 						</Text>
 					</VStack>
-					<View className="border border-gray-400 rounded-full w-12 h-12 justify-center items-center">
-						<ArrowRightIcon color={colors.gray[400]} />
+					<View className="border border-neutral-700 rounded-full w-12 h-12 justify-center items-center">
+						<ArrowRightIcon color={colors.white} />
 					</View>
 					<VStack>
-						<Text className="text-sm text-gray-400">To</Text>
-						<Text className="text-white">
+						<Text className="text-sm text-neutral-400">To</Text>
+						<Text className="text-neutral-200
+">
 							{truncateString({
 								value: transaction?.receiverAddress ?? "",
 								firstCharCount: 5,
@@ -91,17 +94,21 @@ const TransactionRoute = () => {
 						</Text>
 					</VStack>
 				</Card>
-				<Card variant="filled" className="rounded-2xl flex flex-col gap-2">
+				<Card
+					variant="filled"
+					className="rounded-2xl flex flex-col gap-2 border border-neutral-700 bg-neutral-900"
+				>
 					{transactionData.map(({ label, value, borderTop }) => (
 						<HStack
 							className={clsx(
 								"items-center justify-between border-t",
-								borderTop ? "border-gray-600 pt-2" : "border-transparent",
+								borderTop ? "border-neutral-700 pt-2" : "border-transparent",
 							)}
 							key={label}
 						>
-							<Text className="text-sm text-gray-400">{label}</Text>
-							<Text className="text-white capitalize">{value}</Text>
+							<Text className="text-sm text-neutral-400">{label}</Text>
+							<Text className="text-neutral-200
+ capitalize">{value}</Text>
 						</HStack>
 					))}
 				</Card>
@@ -109,13 +116,14 @@ const TransactionRoute = () => {
 					<FormControlLabel>
 						<FormControlLabelText>Memo</FormControlLabelText>
 					</FormControlLabel>
-					<Textarea className="rounded-2xl">
-						<TextareaInput
+					<Input size="lg" className="rounded-2xl border-neutral-700">
+						<InputField
 							value={transaction?.memo}
-							className="text-white"
+							className="text-neutral-200
+"
 							readOnly
 						/>
-					</Textarea>
+					</Input>
 				</FormControl>
 			</VStack>
 			<VStack className="gap-2">
@@ -130,7 +138,7 @@ const TransactionRoute = () => {
 					<ButtonText>Close</ButtonText>
 				</Button>
 			</VStack>
-		</VStack>
+		</ScrollView>
 	);
 };
 

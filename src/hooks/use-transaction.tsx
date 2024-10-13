@@ -15,5 +15,7 @@ export const useTransaction = ({ hash }: UseTransactionProps) => {
 		hash,
 		network,
 	});
-	return useSWR<ExternalDetailedTransactionData>(url, fetcher);
+	return useSWR<ExternalDetailedTransactionData>([url, network], ([url]) =>
+		fetcher(url),
+	);
 };

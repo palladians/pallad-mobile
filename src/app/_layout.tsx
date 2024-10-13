@@ -1,6 +1,5 @@
 import "@web3modal/polyfills";
 import "react-native-get-random-values";
-import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -9,6 +8,12 @@ import { Providers } from "@/components/providers";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import {
+	useFonts,
+	DMSans_400Regular,
+	DMSans_500Medium,
+	DMSans_700Bold,
+} from "@expo-google-fonts/dm-sans";
 
 dayjs.extend(relativeTime);
 
@@ -26,24 +31,18 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-	const [loaded, error] = useFonts({
-		"DM Sans": require("../assets/DMSans.ttf"),
+	const [fontsLoaded, error] = useFonts({
+		DMSans_400Regular,
+		DMSans_500Medium,
+		DMSans_700Bold,
 	});
 
-	// Expo Router uses Error Boundaries to catch errors in the navigation tree.
 	useEffect(() => {
-		if (error) throw error;
-	}, [error]);
+		if (!fontsLoaded) return;
+		SplashScreen.hideAsync();
+	}, [fontsLoaded]);
 
-	useEffect(() => {
-		if (loaded) {
-			SplashScreen.hideAsync();
-		}
-	}, [loaded]);
-
-	if (!loaded) {
-		return null;
-	}
+	if (error) return null;
 
 	return <RootLayoutNav />;
 }
@@ -51,7 +50,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
 	return (
 		<Providers>
-			<SafeAreaView className="flex flex-1 flex-col font-dm-sans">
+			<SafeAreaView className="flex flex-1 flex-col">
 				<Slot />
 			</SafeAreaView>
 		</Providers>

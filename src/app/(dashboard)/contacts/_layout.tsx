@@ -1,11 +1,9 @@
 import { Button, ButtonIcon } from "@/components/ui/button";
-import { Link } from "expo-router";
-import { Stack, useRouter } from "expo-router";
-import { ArrowLeftIcon, QrCodeIcon } from "lucide-react-native";
+import { Link, Stack } from "expo-router";
+import { PlusIcon } from "lucide-react-native";
 import colors from "tailwindcss/colors";
 
 const Layout = () => {
-	const router = useRouter();
 	return (
 		<Stack
 			screenOptions={{
@@ -20,42 +18,25 @@ const Layout = () => {
 			<Stack.Screen
 				name="index"
 				options={{
-					title: "Send",
-					headerLeft: () => (
-						<Button
-							variant="link"
-							onPress={router.back}
-							size="lg"
-							className="mr-4"
-						>
-							<ButtonIcon
-								as={ArrowLeftIcon}
-								width={24}
-								height={24}
-								color={colors.neutral[200]}
-							/>
-						</Button>
-					),
-					// TODO: Enable when QR code scanning is not crashing on iOS.
+					title: "Contacts",
 					headerRight: () => (
-						<Link href="/send/scan" asChild>
+						<Link href="/contacts/create" asChild>
 							<Button variant="link" size="lg">
-								<ButtonIcon as={QrCodeIcon} />
+								<ButtonIcon
+									as={PlusIcon}
+									width={24}
+									height={24}
+									color={colors.neutral[200]}
+								/>
 							</Button>
 						</Link>
 					),
 				}}
 			/>
 			<Stack.Screen
-				name="summary"
+				name="create"
 				options={{
-					title: "Summary",
-				}}
-			/>
-			<Stack.Screen
-				name="scan"
-				options={{
-					title: "Scan QR Code",
+					title: "Create Contact",
 					presentation: "modal",
 					headerStyle: { backgroundColor: colors.neutral[900] },
 					contentStyle: { backgroundColor: colors.neutral[900] },

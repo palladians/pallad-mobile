@@ -19,17 +19,15 @@ config.transformer = {
 };
 config.resolver = {
 	...resolver,
-	assetExts: resolver.assetExts.filter((ext) => ext !== "svg"),
+	assetExts: [...resolver.assetExts.filter((ext) => ext !== "svg")],
 	sourceExts: [...resolver.sourceExts, "svg"],
 };
 
 // config.resolver.resolveRequest = (context, moduleName, platform) => {
-//   if (moduleName === '@ledgerhq/devices/hid-framing') {
-//     return context.resolveRequest(context, '@ledgerhq/devices/lib/hid-framing', platform);
+//   if (moduleName === "o1js") {
+//     return context.resolveRequest(context, "o1js/dist/web", platform);
 //   }
 //   return context.resolveRequest(context, moduleName, platform);
 // };
-
-// module.exports = config;
 
 module.exports = withNativeWind(config, { input: "./src/global.css" });

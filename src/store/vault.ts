@@ -27,7 +27,7 @@ type KeyAgent = KeyAgentLedger;
 
 type VaultStateValue = "uninitialized" | "initialized";
 
-type Contact = {
+export type Contact = {
 	name: string;
 	address: string;
 };
@@ -38,6 +38,8 @@ type VaultState = {
 	keyAgents: KeyAgent[];
 	networkMode: NetworkMode;
 	contacts: Contact[];
+	biometricsRequired: boolean;
+	hideTinyTransactions: boolean;
 };
 
 type VaultCommands = {
@@ -50,6 +52,9 @@ type VaultCommands = {
 	setNetworkMode: (network: NetworkMode) => void;
 	addContact: (contact: Contact) => void;
 	removeContact: (address: string) => void;
+	setBiometricsRequired: (required: boolean) => void;
+	setHideTinyTransactions: (hideTinyTransactions: boolean) => void;
+	setConnectivity: (connectivity: Connectivity) => void;
 };
 
 type VaultStore = VaultState & VaultCommands;
@@ -60,6 +65,8 @@ const initialState: VaultState = {
 	keyAgents: [],
 	networkMode: "mainnet",
 	contacts: [],
+	biometricsRequired: false,
+	hideTinyTransactions: false,
 };
 
 export const useVault = create<VaultStore>()(
@@ -89,6 +96,21 @@ export const useVault = create<VaultStore>()(
 				set((state) => ({
 					contacts: state.contacts.filter((c) => c.address !== address),
 				})),
+			setBiometricsRequired: (biometricsRequired) =>
+				set({ biometricsRequired }),
+			setHideTinyTransactions: (hideTinyTransactions) =>
+				set({ hideTinyTransactions }),
+			setConnectivity: (connectivity) => {
+				const currentKeyAgent = get().getCurrentKeyAgent();
+				if (!currentKeyAgent) return;
+				return set((state) => ({
+					keyAgents: state.keyAgents.map((agent) =>
+						agent.id === currentKeyAgent.id
+							? { ...agent, connectivity }
+							: agent,
+					),
+				}));
+			},
 		}),
 		{
 			name: "pallad_vault",

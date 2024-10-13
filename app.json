@@ -48,6 +48,26 @@
 				{
 					"faceIDPermission": "Allow Pallad to access your Face ID biometric data."
 				}
+			],
+			[
+				"expo-local-authentication",
+				{
+					"faceIDPermission": "Allow Pallad to use Face ID."
+				}
+			],
+			[
+				"expo-camera",
+				{
+					"cameraPermission": "Allow Pallad to access your camera",
+					"microphonePermission": "Allow Pallad to access your microphone",
+					"recordAudioAndroid": true
+				}
+			],
+			[
+				"expo-asset",
+				{
+					"assets": ["src/assets"]
+				}
 			]
 		],
 		"experiments": {

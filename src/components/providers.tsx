@@ -3,6 +3,7 @@ import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import React from "react";
 import type { PropsWithChildren } from "react";
 import { AppState, type AppStateStatus } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SWRConfig } from "swr";
 
 export const Providers = ({ children }: PropsWithChildren) => {
@@ -35,7 +36,11 @@ export const Providers = ({ children }: PropsWithChildren) => {
 			}}
 		>
 			<GluestackUIProvider mode="dark">
-				<ThemeProvider value={DarkTheme}>{children}</ThemeProvider>
+				<ThemeProvider value={DarkTheme}>
+					<GestureHandlerRootView style={{ flex: 1 }}>
+						{children}
+					</GestureHandlerRootView>
+				</ThemeProvider>
 			</GluestackUIProvider>
 		</SWRConfig>
 	);

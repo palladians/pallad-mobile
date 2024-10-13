@@ -19,6 +19,7 @@ module.exports = (api) => {
 						"@ledgerhq/devices/hid-framing":
 							"@ledgerhq/devices/lib/hid-framing",
 						"@ledgerhq/devices/ble": "@ledgerhq/devices/lib/ble",
+						o1js: "o1js/dist/web",
 					},
 				},
 			],

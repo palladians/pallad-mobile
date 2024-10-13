@@ -1,5 +1,6 @@
 import type { Message } from "@/hooks/use-inbox";
 import { dateFromNow } from "@/lib/utils";
+import { clsx } from "clsx";
 import { router } from "expo-router";
 import { Avatar, AvatarFallbackText, AvatarImage } from "./ui/avatar";
 import { Pressable } from "./ui/pressable";
@@ -11,18 +12,26 @@ export const ChatPreview = ({
 	participantAddress,
 	participantImage,
 	lastMessage,
+	className,
 }: {
 	participantName: string;
 	participantAddress: string;
 	participantImage: string | null;
 	lastMessage: Message;
+	className?: string;
 }) => {
+	const openChat = async (participantAddress: string) => {
+		router.push(`/inbox/${participantAddress}`);
+	};
 	return (
 		<Pressable
-			className="flex flex-row gap-4 p-4 border-b border-zinc-800 w-full"
-			onPress={() => router.push(`/inbox/${participantAddress}`)}
+			className={clsx(
+				"flex flex-row gap-4 p-4 border-b border-neutral-800 w-full active:bg-neutral-900",
+				className,
+			)}
+			onPress={() => openChat(participantAddress)}
 		>
-			<Avatar className="bg-zinc-400">
+			<Avatar className="bg-neutral-400">
 				<AvatarFallbackText>{participantName}</AvatarFallbackText>
 				{participantImage ? (
 					<AvatarImage source={{ uri: participantImage }} />
@@ -30,12 +39,12 @@ export const ChatPreview = ({
 			</Avatar>
 			<View className="flex flex-1 flex-col">
 				<View className="flex flex-row justify-between">
-					<Text className="text-white">{participantName}</Text>
-					<Text className="text-gray-400 text-sm">
+					<Text className="text-neutral-200">{participantName}</Text>
+					<Text className="text-neutral-400 text-sm">
 						{dateFromNow(lastMessage.date)}
 					</Text>
 				</View>
-				<Text className="text-gray-400">{lastMessage.content}</Text>
+				<Text className="text-neutral-400">{lastMessage.content}</Text>
 			</View>
 		</Pressable>
 	);

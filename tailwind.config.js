@@ -195,7 +195,9 @@ module.exports = {
 				},
 			},
 			fontFamily: {
-				"dm-sans": ["DM Sans", "sans-serif"],
+				"dm-regular": ["DMSans_400Regular"],
+				"dm-medium": ["DMSans_500Medium"],
+				"dm-bold": ["DMSans_700Bold"],
 			},
 			fontWeight: {
 				hairline: "100",
