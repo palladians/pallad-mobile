@@ -20,7 +20,7 @@
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./src/assets/adaptive-icon.png",
+				"foregroundImage": "./src/assets/adaptive.png",
 				"backgroundColor": "#ffffff"
 			},
 			"package": "co.pallad.wallet",
