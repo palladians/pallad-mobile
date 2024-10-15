@@ -16,14 +16,14 @@
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": true,
-			"bundleIdentifier": "xyz.palladians.pallad"
+			"bundleIdentifier": "co.pallad.wallet"
 		},
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./src/assets/adaptive-icon.png",
 				"backgroundColor": "#ffffff"
 			},
-			"package": "xyz.palladians.pallad",
+			"package": "co.pallad.wallet",
 			"permissions": [
 				"android.permission.BLUETOOTH",
 				"android.permission.BLUETOOTH_ADMIN",
