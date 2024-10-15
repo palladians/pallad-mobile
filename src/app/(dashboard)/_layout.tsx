@@ -1,14 +1,16 @@
 import { View } from "@/components/ui/view";
 import { useVault } from "@/store/vault";
 import * as LocalAuthentication from "expo-local-authentication";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { CircleUserIcon, HomeIcon, InboxIcon } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import colors from "tailwindcss/colors";
 
 const DashboardLayout = () => {
+	const router = useRouter();
 	const biometricsRequired = useVault((state) => state.biometricsRequired);
 	const [authenticated, setAuthenticated] = useState(!biometricsRequired);
+	const currentKeyAgent = useVault((state) => state.getCurrentKeyAgent());
 
 	useEffect(() => {
 		if (!biometricsRequired) return;
@@ -18,6 +20,12 @@ const DashboardLayout = () => {
 			}
 		});
 	}, [biometricsRequired]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
+	useEffect(() => {
+		if (currentKeyAgent) return;
+		router.replace("/start");
+	}, [currentKeyAgent]);
 
 	if (!authenticated) return <View className="flex-1 bg-black" />;
 

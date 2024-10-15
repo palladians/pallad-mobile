@@ -21,7 +21,7 @@ const DateMessages = ({
 				{dateFromNow(date)}
 			</Text>
 			<FlashList
-				data={messages}
+				data={messages?.reverse()}
 				renderItem={({ item }) => <ChatEntry message={item} />}
 				className="mt-2"
 				estimatedItemSize={92}

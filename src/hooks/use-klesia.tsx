@@ -28,8 +28,8 @@ export const klesiaFetcher = async ({
 
 export const useKlesia = <T,>({ network, method, params }: UseKlesiaProps) => {
 	const keyAgent = useVault((state) => state.getCurrentKeyAgent());
-	if (!keyAgent) return null;
-	return useSWR<T>([method, network, keyAgent.id], ([method]) =>
-		klesiaFetcher({ method, network, params }),
+	return useSWR<T>(
+		keyAgent ? [method, network, keyAgent.id] : null,
+		([method]) => klesiaFetcher({ method, network, params }),
 	);
 };

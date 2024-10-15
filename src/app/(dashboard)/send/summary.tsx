@@ -60,10 +60,12 @@ const SummaryRoute = () => {
 	};
 
 	const onStartOver = () => {
+		setSigningState("idle");
 		return router.replace("/send");
 	};
 
 	const onFinished = () => {
+		setSigningState("idle");
 		return router.replace("/inbox");
 	};
 
@@ -88,8 +90,10 @@ const SummaryRoute = () => {
 					<Text className="text-neutral-400">To</Text>
 					<HStack className="justify-between">
 						<Text className="text-neutral-400">Address</Text>
-						<Text className="text-neutral-200
-">
+						<Text
+							className="text-neutral-200
+"
+						>
 							{truncateString({
 								value: unsignedTransaction.receiverAddress,
 								endCharCount: 5,
@@ -106,31 +110,49 @@ const SummaryRoute = () => {
 					<HStack className="justify-between">
 						<Text className="text-neutral-400">Network</Text>
 						<HStack className="gap-1">
-							<Text className="text-neutral-200
-">Mina</Text>
+							<Text
+								className="text-neutral-200
+"
+							>
+								Mina
+							</Text>
 							<Text className="capitalize">{network}</Text>
 						</HStack>
 					</HStack>
 					{unsignedTransaction.txType === 0 ? (
 						<HStack className="justify-between">
 							<Text className="text-neutral-400">Amount</Text>
-							<Text className="text-neutral-200
-">
+							<Text
+								className="text-neutral-200
+"
+							>
 								{unsignedTransaction.amount} MINA
 							</Text>
 						</HStack>
 					) : null}
 					<HStack className="justify-between">
 						<Text className="text-neutral-400">Network fee</Text>
-						<Text className="text-neutral-200
-">{unsignedTransaction.fee} MINA</Text>
+						<Text
+							className="text-neutral-200
+"
+						>
+							{unsignedTransaction.fee} MINA
+						</Text>
 					</HStack>
 					<Divider />
 					<HStack className="justify-between">
-						<Text className="text-neutral-200
-">Total</Text>
-						<Text className="text-neutral-200
-">{totalAmount} MINA</Text>
+						<Text
+							className="text-neutral-200
+"
+						>
+							Total
+						</Text>
+						<Text
+							className="text-neutral-200
+"
+						>
+							{totalAmount} MINA
+						</Text>
 					</HStack>
 				</Card>
 			</VStack>

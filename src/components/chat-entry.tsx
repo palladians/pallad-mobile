@@ -13,6 +13,11 @@ import { View } from "./ui/view";
 
 const ChatPayment = ({ message }: { message: Message }) => {
 	const outgoing = message.sender === "me";
+	const actionLabel = outgoing
+		? message.txType === "payment"
+			? "Sent"
+			: "Delegated"
+		: "Received";
 	return (
 		<Link
 			href={`/inbox/transaction/${message.hash}`}
@@ -41,14 +46,14 @@ const ChatPayment = ({ message }: { message: Message }) => {
 							height={12}
 						/>
 					)}
-					<Text className="text-neutral-400">
-						{outgoing ? "Sent" : "Received"}
-					</Text>
+					<Text className="text-neutral-400">{actionLabel}</Text>
 				</HStack>
 				<HStack className="gap-2 items-center">
 					<MinaBare width={16} height={16} />
-					<Text className="text-neutral-200
- text-xl">
+					<Text
+						className="text-neutral-200
+ text-xl"
+					>
 						{message.amount.toFixed(2)}
 					</Text>
 				</HStack>
@@ -79,8 +84,12 @@ const ChatMessage = ({ message }: { message: Message }) => {
 							: "bg-neutral-800 rounded-bl-none",
 					)}
 				>
-					<Text className="text-neutral-200
-">{message.content}</Text>
+					<Text
+						className="text-neutral-200
+"
+					>
+						{message.content}
+					</Text>
 				</View>
 				{message.type === "message" ? (
 					<View className="flex flex-row items-center gap-1">

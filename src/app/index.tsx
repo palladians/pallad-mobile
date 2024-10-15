@@ -1,8 +1,22 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
-import { Link, router } from "expo-router";
+import { Link, Redirect } from "expo-router";
 import React from "react";
-const index = () => {
+import { useVault } from "@/store/vault";
+
+const devMode = process.env.EXPO_PUBLIC_DEV_MODE === "true";
+
+const IndexRoute = () => {
+	const currentKeyAgent = useVault((state) => state.getCurrentKeyAgent());
+
+	if (!devMode && currentKeyAgent) {
+		return <Redirect href="/home" />;
+	}
+
+	if (!devMode && !currentKeyAgent) {
+		return <Redirect href="/start" />;
+	}
+
 	return (
 		<VStack className="p-2 md:max-w-[440px] w-full" space="xl">
 			<Link href="/start" asChild>
@@ -24,4 +38,4 @@ const index = () => {
 	);
 };
 
-export default index;
+export default IndexRoute;

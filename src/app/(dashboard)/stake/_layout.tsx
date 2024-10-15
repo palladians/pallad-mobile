@@ -35,13 +35,6 @@ const Layout = () => {
 							/>
 						</Button>
 					),
-					headerRight: () => (
-						<Link href="/send?txType=4" asChild>
-							<Button variant="link" size="lg">
-								<ButtonText>Delegate</ButtonText>
-							</Button>
-						</Link>
-					),
 				}}
 			/>
 		</Stack>

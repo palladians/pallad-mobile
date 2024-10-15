@@ -12,7 +12,7 @@ const InboxRoute = () => {
 					participantName={item.participantName}
 					participantAddress={item.participantAddress}
 					participantImage={item.participantImage}
-					lastMessage={Object.values(item.messages)[0].reverse()[0]}
+					lastMessage={Object.values(item.messages)[0]?.reverse()?.[0]}
 					className={index === 0 ? "border-t" : ""}
 				/>
 			)}

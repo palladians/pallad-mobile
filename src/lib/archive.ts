@@ -51,7 +51,9 @@ export const constructPendingTransactionsUrl = ({
   publicKey,
   network,
 }: ConstructTransactionsUrlProps) => {
-  const url = new URL(`https://minascan.io/${network}/api/api/core/transactions/pending`);
+  const url = new URL(
+    `https://minascan.io/${network}/api/api/core/transactions/pending`,
+  );
   url.searchParams.append("page", "0");
   url.searchParams.append("limit", "20");
   url.searchParams.append("sortBy", "AMOUNT");
@@ -59,4 +61,11 @@ export const constructPendingTransactionsUrl = ({
   url.searchParams.append("size", "20");
   url.searchParams.append("searchStr", publicKey);
   return url.toString();
-}
+};
+
+export const constructDelegateeUrl = ({
+  publicKey,
+  network,
+}: ConstructTransactionsUrlProps) => {
+  return `https://minascan.io/${network}/api/api/core/accounts/${publicKey}/delegatee`;
+};

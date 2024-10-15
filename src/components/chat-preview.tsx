@@ -17,9 +17,10 @@ export const ChatPreview = ({
 	participantName: string;
 	participantAddress: string;
 	participantImage: string | null;
-	lastMessage: Message;
+	lastMessage: Message | undefined;
 	className?: string;
 }) => {
+	if (!lastMessage) return null;
 	const openChat = async (participantAddress: string) => {
 		router.push(`/inbox/${participantAddress}`);
 	};

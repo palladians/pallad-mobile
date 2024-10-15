@@ -46,8 +46,9 @@ type VaultCommands = {
 	addKeyAgent: (keyAgent: KeyAgent) => void;
 	getKeyAgent: (id: string) => KeyAgent | undefined;
 	removeKeyAgent: (id: string) => void;
+	removeCurrentKeyAgent: () => void;
 	setState: (state: VaultStateValue) => void;
-	setCurrentKeyAgentId: (id: string) => void;
+	setCurrentKeyAgentId: (id: string | undefined) => void;
 	getCurrentKeyAgent: () => KeyAgent | undefined;
 	setNetworkMode: (network: NetworkMode) => void;
 	addContact: (contact: Contact) => void;
@@ -55,9 +56,10 @@ type VaultCommands = {
 	setBiometricsRequired: (required: boolean) => void;
 	setHideTinyTransactions: (hideTinyTransactions: boolean) => void;
 	setConnectivity: (connectivity: Connectivity) => void;
+	reset: () => void;
 };
 
-type VaultStore = VaultState & VaultCommands;
+export type VaultStore = VaultState & VaultCommands;
 
 const initialState: VaultState = {
 	state: "uninitialized",
@@ -82,6 +84,20 @@ export const useVault = create<VaultStore>()(
 				set((state) => ({
 					keyAgents: state.keyAgents.filter((agent) => agent.id !== id),
 				})),
+			removeCurrentKeyAgent: () => {
+				const { currentKeyAgentId, removeKeyAgent, setCurrentKeyAgentId } =
+					get();
+				if (!currentKeyAgentId) return;
+				removeKeyAgent(currentKeyAgentId);
+				const keyAgents = get().keyAgents;
+				const keyAgentCount = keyAgents.length;
+				if (keyAgentCount > 0) {
+					setCurrentKeyAgentId(keyAgents[0].id);
+				} else {
+					setCurrentKeyAgentId(undefined);
+				}
+				return keyAgentCount;
+			},
 			setState: (state) => set({ state }),
 			setCurrentKeyAgentId: (id) => set({ currentKeyAgentId: id }),
 			getCurrentKeyAgent: () => {
@@ -110,6 +126,9 @@ export const useVault = create<VaultStore>()(
 							: agent,
 					),
 				}));
+			},
+			reset: () => {
+				return set(initialState);
 			},
 		}),
 		{

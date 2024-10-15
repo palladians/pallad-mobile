@@ -10,7 +10,6 @@ import { match } from "ts-pattern";
 import type { ZodSchema } from "zod";
 import { useFiatPrice } from "./use-fiat-price";
 import { klesiaFetcher, useKlesia } from "./use-klesia";
-import { listen } from "@ledgerhq/logs";
 
 // Thx Auro
 function _reEncodeRawSignature(rawSignature: string) {
@@ -56,7 +55,7 @@ const _createLedgerTransport = async ({
 	return Transport.default.create();
 };
 
-type importWalletProps = {
+type ImportWalletProps = {
 	name: string;
 	addressIndex: number;
 	vendor: Vendor;
@@ -92,7 +91,6 @@ export const useWallet = () => {
 		return match(vendor)
 			.with("ledger", async () => {
 				const transport = await _createLedgerTransport({ connectivity });
-        listen((log) => console.log('>>>LEDGER', log))
 				return new MinaLedgerJS(transport as never);
 			})
 			.exhaustive();
@@ -111,7 +109,7 @@ export const useWallet = () => {
 		addressIndex,
 		vendor,
 		connectivity,
-	}: importWalletProps) => {
+	}: ImportWalletProps) => {
 		const instance = await _getHwSdk({
 			vendor,
 			connectivity,
@@ -163,9 +161,7 @@ export const useWallet = () => {
 			schema = SendDelegationSchema;
 		}
 
-		console.log(">>>TXB", txBody);
 		const response = await wallet.signTransaction(txBody);
-		console.log(">>>R", response);
 		const rawSignature = response?.signature;
 
 		if (!rawSignature) throw new Error("No signature found");
@@ -199,7 +195,6 @@ export const useWallet = () => {
 			},
 		};
 		let hash: string;
-		console.log(">>>REQ", payload, type);
 		try {
 			const { result } = await klesiaFetcher({
 				network,
