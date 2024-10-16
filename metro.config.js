@@ -3,9 +3,7 @@ const path = require("node:path");
 const { withNativeWind } = require("nativewind/metro");
 
 const projectRoot = __dirname;
-const config = getDefaultConfig(projectRoot, {
-	isCSSEnabled: true,
-});
+const config = getDefaultConfig(projectRoot);
 
 const { transformer, resolver } = config;
 
