@@ -1,8 +1,8 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
+import { useVault } from "@/store/vault";
 import { Link, Redirect } from "expo-router";
 import React from "react";
-import { useVault } from "@/store/vault";
 
 const devMode = process.env.EXPO_PUBLIC_DEV_MODE === "true";
 

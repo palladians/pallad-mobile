@@ -70,8 +70,10 @@ const TransactionRoute = () => {
 				>
 					<VStack>
 						<Text className="text-sm text-neutral-400">From</Text>
-						<Text className="text-neutral-200
-">
+						<Text
+							className="text-neutral-200
+"
+						>
 							{truncateString({
 								value: transaction?.sourceAddress ?? "",
 								firstCharCount: 5,
@@ -84,8 +86,10 @@ const TransactionRoute = () => {
 					</View>
 					<VStack>
 						<Text className="text-sm text-neutral-400">To</Text>
-						<Text className="text-neutral-200
-">
+						<Text
+							className="text-neutral-200
+"
+						>
 							{truncateString({
 								value: transaction?.receiverAddress ?? "",
 								firstCharCount: 5,
@@ -107,8 +111,12 @@ const TransactionRoute = () => {
 							key={label}
 						>
 							<Text className="text-sm text-neutral-400">{label}</Text>
-							<Text className="text-neutral-200
- capitalize">{value}</Text>
+							<Text
+								className="text-neutral-200
+ capitalize"
+							>
+								{value}
+							</Text>
 						</HStack>
 					))}
 				</Card>

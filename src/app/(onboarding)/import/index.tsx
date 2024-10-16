@@ -18,12 +18,13 @@ import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
 import { VStack } from "@/components/ui/vstack";
 import { useWallet } from "@/hooks/use-wallet";
+import { requestAndroidPermissions } from "@/lib/permissions";
 import type { Connectivity } from "@/store/vault";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { type BaseSyntheticEvent, useState } from "react";
 import { useController, useForm } from "react-hook-form";
-import { Platform } from "react-native";
+import { Alert, PermissionsAndroid, Platform } from "react-native";
 import { z } from "zod";
 
 const ImportingModal = ({ importing }: { importing: boolean }) => {
@@ -81,6 +82,7 @@ const ImportRoute = () => {
 		return handleSubmit(async (data) => {
 			setImporting(true);
 			try {
+				await requestAndroidPermissions();
 				await importWallet({
 					name: data.name,
 					addressIndex: Number.parseInt(data.addressIndex),
@@ -88,6 +90,8 @@ const ImportRoute = () => {
 					vendor: "ledger",
 				});
 				router.navigate("/home");
+			} catch (error: any) {
+				Alert.alert("Error", error.message);
 			} finally {
 				setImporting(false);
 			}

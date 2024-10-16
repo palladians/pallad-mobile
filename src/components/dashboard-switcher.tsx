@@ -6,6 +6,7 @@ import { useVault } from "@/store/vault";
 import { Link } from "expo-router";
 import { ChevronDownIcon } from "lucide-react-native";
 import { useState } from "react";
+import colors from "tailwindcss/colors";
 import {
 	Actionsheet,
 	ActionsheetBackdrop,
@@ -16,7 +17,6 @@ import {
 	ActionsheetItemText,
 } from "./ui/actionsheet";
 import { Pressable } from "./ui/pressable";
-import colors from "tailwindcss/colors";
 
 export const DashboardSwitcher = () => {
 	const [showActionsheet, setShowActionsheet] = useState(false);

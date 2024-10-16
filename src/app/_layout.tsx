@@ -6,14 +6,14 @@ import { useEffect } from "react";
 import "../global.css";
 import { Providers } from "@/components/providers";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import {
-	useFonts,
 	DMSans_400Regular,
 	DMSans_500Medium,
 	DMSans_700Bold,
+	useFonts,
 } from "@expo-google-fonts/dm-sans";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 

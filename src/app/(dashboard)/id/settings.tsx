@@ -6,10 +6,10 @@ import { ScrollView } from "@/components/ui/scroll-view";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import { useVault } from "@/store/vault";
+import { Link, useRouter } from "expo-router";
 import { Alert, Platform } from "react-native";
 import colors from "tailwindcss/colors";
 import packageJson from "../../../../package.json";
-import { Link, useRouter } from "expo-router";
 
 const SettingsRoute = () => {
 	const router = useRouter();

@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from "react";
+import colors from "tailwindcss/colors";
 import { Text } from "./ui/text";
 import { View } from "./ui/view";
-import colors from "tailwindcss/colors";
 
 export type TokenTileProps = {
 	name: string;

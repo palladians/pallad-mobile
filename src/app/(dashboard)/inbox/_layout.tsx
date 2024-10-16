@@ -2,6 +2,7 @@ import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { useVault } from "@/store/vault";
 import { Link, Stack, router, useGlobalSearchParams } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
 import {
 	ArrowUpRightIcon,
 	BookUserIcon,
@@ -9,7 +10,6 @@ import {
 	MoreVerticalIcon,
 } from "lucide-react-native";
 import colors from "tailwindcss/colors";
-import * as WebBrowser from "expo-web-browser";
 
 const Layout = () => {
 	return (

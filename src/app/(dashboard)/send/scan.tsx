@@ -55,8 +55,12 @@ const ScanRoute = () => {
 					className="rounded-full bg-neutral-800"
 					onPress={router.back}
 				>
-					<ButtonText className="text-neutral-200
-">Close</ButtonText>
+					<ButtonText
+						className="text-neutral-200
+"
+					>
+						Close
+					</ButtonText>
 				</Button>
 			</VStack>
 		</VStack>

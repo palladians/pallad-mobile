@@ -78,8 +78,8 @@ export const SigningDrawer = ({
 						))
 						.exhaustive()}
 				</View>
-          <DrawerFooter className="flex-col items-center justify-center w-full gap-2 h-[86]">
-          {signingState === 'error' ? (
+				<DrawerFooter className="flex-col items-center justify-center w-full gap-2 h-[86]">
+					{signingState === "error" ? (
 						<Button
 							size="lg"
 							onPress={onStartOver}
@@ -97,17 +97,21 @@ export const SigningDrawer = ({
 							<ButtonText className="text-black">View Inbox</ButtonText>
 						</Button>
 					) : null}
-					{['error', 'signing'].includes(signingState) ? (
+					{["error", "signing"].includes(signingState) ? (
 						<Button
 							size="lg"
 							onPress={onCancel}
 							className="rounded-full bg-neutral-800 w-full h-[40]"
 						>
-							<ButtonText className="text-neutral-200
-">Cancel</ButtonText>
+							<ButtonText
+								className="text-neutral-200
+"
+							>
+								Cancel
+							</ButtonText>
 						</Button>
 					) : null}
-          </DrawerFooter>
+				</DrawerFooter>
 			</DrawerContent>
 		</Drawer>
 	);

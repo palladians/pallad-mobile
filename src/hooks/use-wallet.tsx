@@ -2,6 +2,8 @@ import "@web3modal/polyfills";
 import { SendDelegationSchema, SendPaymentSchema } from "@/lib/validation";
 import { type Connectivity, type Vendor, useVault } from "@/store/vault";
 import type { NodePayment, Transaction } from "@/types";
+import UsbTransport from "@ledgerhq/react-native-hid";
+import BleTransport from "@ledgerhq/react-native-hw-transport-ble";
 import BigDecimal from "js-big-decimal";
 import { MinaLedgerJS, Networks, TxType } from "mina-ledger-js";
 import { nanoid } from "nanoid";
@@ -26,24 +28,15 @@ function _reEncodeRawSignature(rawSignature: string) {
 	return shuffleBytes(field) + shuffleBytes(scalar);
 }
 
-const _getLedgerTransportLib = async ({
+const _getLedgerTransportLib = ({
 	connectivity,
 }: {
 	connectivity: Connectivity;
 }) => {
-	return match(Platform.OS)
-		.with("web", () =>
-			match(connectivity)
-				.with("ble", () => import("@ledgerhq/hw-transport-web-ble"))
-				.with("usb", () => import("@ledgerhq/hw-transport-webhid"))
-				.exhaustive(),
-		)
-		.otherwise(() =>
-			match(connectivity)
-				.with("ble", () => import("@ledgerhq/react-native-hw-transport-ble"))
-				.with("usb", () => import("@ledgerhq/react-native-hid"))
-				.exhaustive(),
-		);
+	return match(connectivity)
+		.with("ble", () => BleTransport)
+		.with("usb", () => UsbTransport)
+		.exhaustive();
 };
 
 const _createLedgerTransport = async ({
@@ -51,8 +44,8 @@ const _createLedgerTransport = async ({
 }: {
 	connectivity: Connectivity;
 }) => {
-	const Transport = await _getLedgerTransportLib({ connectivity });
-	return Transport.default.create();
+	const Transport = _getLedgerTransportLib({ connectivity });
+	return Transport.create(60000, 60000);
 };
 
 type ImportWalletProps = {

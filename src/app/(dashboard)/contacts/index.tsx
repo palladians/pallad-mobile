@@ -15,8 +15,12 @@ const ContactEntry = ({ contact }: { contact: Contact }) => {
 					<AvatarFallbackText>{contact.name}</AvatarFallbackText>
 				</Avatar>
 				<VStack>
-					<Text className="text-neutral-200
-">{contact.name}</Text>
+					<Text
+						className="text-neutral-200
+"
+					>
+						{contact.name}
+					</Text>
 					<Text size="sm" className="text-neutral-400">
 						{truncateString({
 							value: contact.address,
